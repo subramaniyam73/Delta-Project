@@ -1,0 +1,20 @@
+<%-include("partials/header")%>
+<%-include("partials/navBar")%>
+
+<h1>My Friends </h1>
+<%users.forEach((user)=>{%>
+  <div class="userBox">
+    <div class="profilePicture">
+      <%if(user.image){%>
+        <img src="/submit/image/<%=user.id%>" alt="">
+      <%}else{%>
+        <img src="/images/user.png" alt="">
+      <%}%>
+    </div>
+    <br>
+    <a href="/users/<%=user.id%>"><%=user.name%></a>
+  </div>
+<%});%>
+
+
+<%-include("partials/footer")%>

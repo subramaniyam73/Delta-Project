@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delta Task 3</title>
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/styles2.css">
+  <link rel="stylesheet" href="/css/navStyles.css">
+  <link rel="stylesheet" href="/css/mobileStyles.css">
+  <script src="https://cdn.tiny.cloud/1/mz4azzdg6i1n2ztvy6vtkbsagrkmx6w4h43v68zdqee88ble/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Lobster+Two:wght@700&family=Noto+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Metal+Mania&family=Righteous&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Dancing+Script:wght@700&family=Kelly+Slab&family=Lobster+Two&family=Michroma&family=Righteous&family=Satisfy&family=Shojumaru&family=Sriracha&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="coverImage">
+  <%if(user.image){%>
+    <img src="/submit/image/<%=user.id%>" alt="">
+  <%}else{%>
+    <img src="/images/cover.jpg" alt="" width="600" height="250">
+  <%}%>
+</div>
+<div class="profileImage">
+  <%if(user.image){%>
+    <img src="/submit/image/<%=user.id%>" alt="">
+  <%}else{%>
+    <img src="/images/user.png" alt="" width="100" height="100">
+  <%}%>
+</div>
+<div class="details">
+  <span><%=user.name%></span>
+  <span><%=user.birthDay%></span>
+  <span>etc etc</span>
+
+</div>
+<span>Your Profile </span><br>
+<div class="postsContainer">
+  <%posts.forEach((post)=>{%>
+    <div class="postContainer">
+      <span class="postCreator"><%=post.creatorName%></span>
+      <span class="postTime"><%=post.dateTime%></span><br>
+      <p class="postContent"><%-post.content%></p><br>
+      <span class="likesNo"><%=post.likes.length%> Likes</span>
+      <span class="commentsNo"><%=post.comments.length%> Comments</span><br>
+      <button class="likeButton" type="button" class="like" name="Like">Like</button>
+      <button  class="commentButton" class="addComment" name="addComment">Add Comment</button>
+    </div>
+  <%})%>
+
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/profile.js"></script>
+
+</body>
+</html>

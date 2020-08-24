@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delta Project-Facebook clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdn.tiny.cloud/1/mz4azzdg6i1n2ztvy6vtkbsagrkmx6w4h43v68zdqee88ble/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+  <ul class="topnav">
+    <li><a href="/dashBoard">DashBoard</a></li>
+    <li><a href="/chats">Chats</a></li>
+    <li><a href="/users/allUsers">All Users</a></li>
+    <li><a href="/notifications">Notifications(<span style="color:red"><%=user.notifications.length%></span>)</a></li>
+    <li><a href="/addPost">Create Post</a></li>
+    <li><a href="/users/myFriends">My Friends</a></li>
+    <li><a href="/users/myProfile">My Profile</a></li>
+    <li><a href="/auth/logout">Logout</a></li>
+  </ul>
+
+      <h2>Update your profile</h2>
+
+      <a href="#" id="profileLink">Update Profile Picture</a>
+
+      <div id="profileForm">
+        <form id="" action="/images/profileImages/<%=user._id%>" method="post" enctype="multipart/form-data">
+          <span>Upload Profile Picture :</span>
+          <input type="hidden" name="type" value="profile">
+          <input type="file" name="file" value="">
+          <button type="submit" name="button">Upload</button>
+        </form>
+      </div>
+      <a href="#" id="coverLink">Update Cover Picture</a>
+      <div id="coverForm">
+        <form id="" action="/images/profileImages/<%=user._id%>" method="post" enctype="multipart/form-data">
+          <span>Upload Cover Picture :</span>
+          <input type="hidden" name="type" value="cover">
+          <input type="file" name="file" value="">
+          <button type="submit" name="button">Upload</button>
+        </form>
+      </div>
+
+      <form class="updateForm" action="/users/<%=user._id%>/submitUpdateProfile" method="POST">
+        <textarea name="bio" rows="4" cols="50" placeholder="Enter bio" value="<%=user.bio%>"></textarea><br>
+        <input type="text" name="relStatus"  value="<%=user.relStatus%>" placeholder="Relationship Status"><br>
+        <input type="text" name="workPos"value="<%=user.work.pos%>" placeholder="Working as :"><br>
+        <input type="text" name="workOrg"value="<%=user.work.org%>" placeholder="Working in :"><br>
+        <input type="text" name="collegeDeg"value="<%=user.college.deg%>" placeholder="College Degree"><br>
+        <input type="text" name="collegeOrg"value="<%=user.college.org%>" placeholder="College"><br>
+        <input type="text" name="schoolOrg" value="<%=user.school.org%>" placeholder="School"><br>
+        <label for="birthDay">Birthday :   </label>
+        <input type="date" name="birthDay" id="birthDay" max="2001-12-31" required>
+        <div class="interestsBox">
+          <%user.interests.forEach((interest)=>{%>
+            <input type="text" value="<%=interest%>" name="interests[]" placeholder="Enter interest">
+          <%});%>
+        </div>
+        <button type="button" name="insertTextBox" id="insertTextBox">Add Interest</button>
+        <button type="submit" name="update">Update Profile</button>
+      </form>
+
+
+
+
+      <script type="text/javascript">
+
+        $("#insertTextBox").on("click",(e)=>{
+          console.log("??");
+          $(".interestsBox").append(`<input type="text" placeholder="Enter interest" name="interests[]">`);
+        });
+
+      </script>
+
+
+
+
+
+
+
+
+</body>
+</html>

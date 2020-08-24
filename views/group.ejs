@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delta Project-Facebook clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdn.tiny.cloud/1/mz4azzdg6i1n2ztvy6vtkbsagrkmx6w4h43v68zdqee88ble/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+  <ul class="topnav">
+    <li><a href="/dashBoard">DashBoard</a></li>
+    <li><a href="/chats">Chats</a></li>
+    <li><a href="/users/allUsers">All Users</a></li>
+    <li><a href="/notifications">Notifications(<span style="color:red"><%=user.notifications.length%></span>)</a></li>
+    <li><a href="/addPost">Create Post</a></li>
+    <li><a href="/users/myFriends">My Friends</a></li>
+    <li><a href="/users/myProfile">My Profile</a></li>
+    <li><a href="/auth/logout">Logout</a></li>
+  </ul>
+
+
+  <div class="groupDetails">
+    <span><%=group.name%></span><br>
+    <span><%=group.description%></span>
+    <a href="/groups/<%=group.id%>/members"><span><%=group.members.length%> Members</span></a>
+  </div>
+
+  <%if(group.admin==user._id){%>
+    <span>You are the admin </span>
+    <button type="button" name="button">Add members</button>
+  <%}else{%>
+    <%if(user.sent.groupRequests.includes(group._id)){%>
+      <span>Group Request sent to admin</span>
+    <%}else if(user.received.groupInvites.includes(group._id)){%>
+      <span>Group invite received</span>
+      <form action="/groups/<%=group._id%>/accept" method="post">
+        <button type="submit" name="button">Accept</button>
+      </form>
+      <form action="/groups/<%=group._id%>/reject" method="post">
+        <button type="submit" name="button">Reject</button>
+      </form>
+    <%}else if(group.members.includes(user._id)){%>
+      <span>You are a member of the group</span>
+    <%}else{%>
+      <form action="/groups/<%=group._id%>/request" method="post">
+        <button type="submit" name="button">Send Request</button>
+      </form>
+    <%}%>
+  <%}%>
+
+  <%if((group.privacy=="private"&&group.members.includes(user._id))||(group.privacy=="public")||(group.admin==user._id)){%>
+    <div class="postsContainer">
+      <%if(posts.length==0){%>
+        <h2>No posts yet !</h2>
+      <%}else{%>
+        <%posts.forEach((post)=>{%>
+          <div class="postContainer">
+            <span class="postCreator"><%=post.creator%></span>
+            <span class="postTime"><%=post.dateTime%></span><br>
+            <p class="postContent"><%-post.content%></p><br>
+            <span class="likesNo"><%=post.likes.length%> Likes</span>
+            <span class="commentsNo"><%=post.comments.length%> Comments</span><br>
+            <button class="likeButton" type="button" class="like" name="Like">Like</button>
+            <button  class="commentButton" class="addComment" name="addComment">Add Comment</button>
+          </div>
+        <%});%>
+      <%}%>
+
+    </div>
+  <%}else{%>
+    <span>Become a member to see posts !</span>
+  <%}%>
+
+
+  <%if(group.members.includes(user._id)){%>
+    <div class="addPostBox">
+      <form action="/groups/createGroupPost" method="post">
+        <input type="hidden" name="creator" value="<%=creator%>">
+        <input type="hidden" name="groupid" value="<%=group._id%>">
+        <textarea name="mytextarea" id="mytextarea" placeholder="Content here !"></textarea>
+        <button type="submit" name="addPostButton">Add Post</button>
+      </form>
+    </div>
+  <%}else{%>
+    <span>Become a member to add posts in  group !</span>
+  <%}%>
+
+<script>
+  tinymce.init({
+    selector: '#mytextarea'
+  });
+</script>
+
+<script type="text/javascript" src="/js/group.js">
+
+</script>
+
+</body>
+</html>

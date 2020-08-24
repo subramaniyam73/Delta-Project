@@ -1,0 +1,12 @@
+<%-include("partials/header")%>
+<%-include("partials/navBar")%>
+
+<div class="chatsBox">
+  <%chats.forEach((chat)=>{%>
+    <div class="chatPreview">
+      <span>Chat with <a href="/chats/<%=chat.id%>"><%=chat.members[0]==user._id?chat.membersName[1]:chat.membersName[0]%></a></span>
+    </div>
+  <%});%>
+</div>
+
+<%-include("partials/footer")%>

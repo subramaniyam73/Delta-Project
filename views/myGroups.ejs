@@ -1,0 +1,21 @@
+<%-include("partials/header")%>
+<%-include("partials/navBar")%>
+
+<div class="groupsBox">
+  <h3>Groups as member</h3>
+  <%groups.forEach((group)=>{%>
+    <div class="groupPreview">
+      <span><a href="/groups/<%=group.id%>">Group->   <%=group.name%></a></span>
+    </div>
+  <%});%>
+  <h3>My groups</h3>
+  <%myGroups.forEach((group)=>{%>
+    <div class="groupPreview">
+      <span><a href="/groups/<%=group.id%>">Group->   <%=group.name%></a></span>
+    </div>
+  <%});%>
+</div>
+
+
+
+<%-include("partials/footer")%>

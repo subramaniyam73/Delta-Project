@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delta Project-Facebook clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdn.tiny.cloud/1/mz4azzdg6i1n2ztvy6vtkbsagrkmx6w4h43v68zdqee88ble/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+  <ul class="topnav">
+    <li><a href="/dashBoard">DashBoard</a></li>
+    <li><a href="/chats">Chats</a></li>
+    <li><a href="/users/allUsers">All Users</a></li>
+    <li><a href="/notifications">Notifications(<span style="color:red"><%=logged.notifications.length%></span>)</a></li>
+    <li><a href="/addPost">Create Post</a></li>
+    <li><a href="/users/myFriends">My Friends</a></li>
+    <li><a href="/users/myProfile">My Profile</a></li>
+    <li><a href="/auth/logout">Logout</a></li>
+  </ul>
+<div class="coverImage">
+  <%if(user.coverPicture==""||!user.coverPicture){%>
+    <img src="/images/cover.jpg" alt="" width="600" height="250">
+  <%}else{%>
+    <img src="/images/<%=user.coverPicture%>" alt="">
+  <%}%>
+</div>
+<div class="profileImage">
+  <%if(user.profilePicture==""||!user.profilePicture){%>
+    <img src="/images/user.png" alt="" width="70px" height="70px">
+  <%}else{%>
+    <img src="/images/<%=user.profilePicture%>" alt="" width="70px" height="70px">
+  <%}%>
+</div>
+
+<%if(logged.id==user.id){%>
+  <span>Your Profile </span>
+
+  <a href="/users/<%=user._id%>/updateProfile">Update Profile</a>
+
+  <div class="details">
+    <span><%=user.name%></span>
+    <span><%=user.birthDay%></span>
+    <span>etc etc</span>
+
+  </div>
+
+  <%if(posts.length==0){%>
+    <span>No posts yet ! create new !</span>
+  <%}else{%>
+    <!-- <div class="postsContainer">
+      <%posts.forEach((post)=>{%>
+        <div class="postContainer">
+          <span class="postCreator"><%=post.creatorName%></span>
+          <span class="postTime"><%=post.dateTime%></span><br>
+          <p class="postContent"><%-post.content%></p><br>
+          <span class="likesNo"><%=post.likes.length%> Likes</span>
+          <span class="commentsNo"><%=post.comments.length%> Comments</span><br>
+          <button class="likeButton" type="button" class="like" name="Like">Like</button>
+          <button  class="commentButton" class="addComment" name="addComment">Add Comment</button>
+        </div>
+      <%})%>
+
+    </div> -->
+    <div class="postsContainer">
+      <%posts.forEach((post)=>{%>
+        <div class="postContainer">
+          <img src="/images/<%=post.file%>" width="100px" height="100px" alt="">
+          <span class="postCreator"><%=post.creatorName%></span>
+          <span class="postTime"><%=post.dateTime%></span><br>
+          <p class="postContent"><%-post.content%></p><br>
+          <span class="likesNo"><%=post.likes.length%></span><span> Likes</span>
+          <span class="commentsNo"><%=post.comments.length%></span><span> Comments</span><br>
+          <form class="likeForm" >
+            <input type="hidden" name="post" value="<%=post._id%>">
+            <input type="hidden" name="user" value="<%=user._id%>">
+            <!-- <button class="likeButton" type="button" class="like" name="Like">Like</button> -->
+            <%if(post.likes.includes(user._id)){%>
+              <input type="hidden" name="liked" value="true">
+              <button type="submit" name="like" class="liked likeButton"><img src="/images/like.png" height="30px" width="30px"></button>
+            <%}else{%>
+              <input type="hidden" name="liked" value="false">
+              <button type="submit" name="like" class="likeButton"><img src="/images/like.png" height="30px" width="30px"></button>
+            <%}%>
+          </form>
+
+          <form class="commentForm" >
+            <input type="hidden" name="post" value="<%=post._id%>">
+            <input type="hidden" name="user" value="<%=user._id%>">
+            <input type="hidden" name="userName" value="<%=user.name%>">
+            <input type="text" name="content" placeholder="Add Comment">
+            <button type="submit" name="addComment" class="addComment"><img src="/images/plus.png" width="30px" height="30px"></button>
+          </form>
+
+          <div class="commentsBox">
+            <%post.comments.forEach((comment)=>{%>
+              <div class="commentBox">
+                <span><%=comment.userName%></span>-->
+                <span><%=comment.content%></span>
+                <span>   @<%=comment.time%></span>
+                <%if(comment.user==user._id){%>
+                  <form class="deleteComment">
+                    <input type="hidden" name="comment" value="<%=comment._id%>">
+                    <input type="hidden" name="post" value="<%=post._id%>">
+                    <button type="submit" name="delete" >Delete</button>
+                  </form>
+                <%}%>
+              </div>
+            <%});%>
+          </div>
+
+        </div>
+      <%})%>
+
+    </div>
+  <%}%>
+<%}else{%>
+  <div class="details">
+    <span><%=user.name%></span>
+    <span><%=user.birthDay%></span>
+    <span>About</span>
+  </div>
+
+  <%if(logged.sent.friendRequests.includes(user._id)){%>
+    <span>Friend Request sent</span>
+  <%}else if(logged.received.friendRequests.includes(user._id)){%>
+    <span>Friend Request Received</span>
+    <form action="/users/<%=user._id%>/accept" method="post">
+      <button type="submit" name="button">Accept</button>
+    </form>
+    <form action="/users/<%=user._id%>/reject" method="post">
+      <button type="submit" name="button">Reject</button>
+    </form>
+  <%}else if(logged.friends.includes(user._id)){%>
+    <span>Friends !</span>
+
+  <%}else{%>
+    <form action="/users/<%=user._id%>/sendRequest" method="post">
+      <button type="submit" name="sendRequest">Add Friend</button>
+    </form>
+  <%}%>
+
+  <form action="/chats/createChat" method="post">
+    <input type="hidden" name="logged" value="<%=logged._id%>">
+    <input type="hidden" name="to" value="<%=user._id%>">
+    <input type="hidden" name="toName" value="<%=user.name%>">
+    <button type="submit" name="message">Message</button>
+  </form>
+
+
+  <%if((user.privacy=="private"&&user.friends.includes(logged._id))||(user.privacy=="public")){%>
+    <%if(posts.length==0){%>
+      <span>The user has not posted anything !</span>
+    <%}else{%>
+      <!-- <div class="postsContainer">
+        <%posts.forEach((post)=>{%>
+          <div class="postContainer">
+            <span class="postCreator"><%=post.creatorName%></span>
+            <span class="postTime"><%=post.dateTime%></span><br>
+            <p class="postContent"><%-post.content%></p><br>
+            <span class="likesNo"><%=post.likes.length%> Likes</span>
+            <span class="commentsNo"><%=post.comments.length%> Comments</span><br>
+            <button class="likeButton" type="button" class="like" name="Like">Like</button>
+            <button  class="commentButton" class="addComment" name="addComment">Add Comment</button>
+          </div>
+        <%})%>
+
+      </div> -->
+      <div class="postsContainer">
+        <%posts.forEach((post)=>{%>
+          <div class="postContainer">
+            <img src="/images/<%=post.file%>" width="100px" height="100px" alt="">
+            <span class="postCreator"><%=post.creatorName%></span>
+            <span class="postTime"><%=post.dateTime%></span><br>
+            <p class="postContent"><%-post.content%></p><br>
+            <span class="likesNo"><%=post.likes.length%></span><span> Likes</span>
+            <span class="commentsNo"><%=post.comments.length%></span><span> Comments</span><br>
+            <form class="likeForm" >
+              <input type="hidden" name="post" value="<%=post._id%>">
+              <input type="hidden" name="user" value="<%=user._id%>">
+              <!-- <button class="likeButton" type="button" class="like" name="Like">Like</button> -->
+              <%if(post.likes.includes(user._id)){%>
+                <input type="hidden" name="liked" value="true">
+                <button type="submit" name="like" class="liked likeButton"><img src="/images/like.png" height="30px" width="30px"></button>
+              <%}else{%>
+                <input type="hidden" name="liked" value="false">
+                <button type="submit" name="like" class="likeButton"><img src="/images/like.png" height="30px" width="30px"></button>
+              <%}%>
+            </form>
+
+            <form class="commentForm" >
+              <input type="hidden" name="post" value="<%=post._id%>">
+              <input type="hidden" name="user" value="<%=user._id%>">
+              <input type="hidden" name="userName" value="<%=user.name%>">
+              <input type="text" name="content" placeholder="Add Comment">
+              <button type="submit" name="addComment" class="addComment"><img src="/images/plus.png" width="30px" height="30px"></button>
+            </form>
+
+            <div class="commentsBox">
+              <%post.comments.forEach((comment)=>{%>
+                <div class="commentBox">
+                  <span><%=comment.userName%></span>-->
+                  <span><%=comment.content%></span>
+                  <span>   @<%=comment.time%></span>
+                  <%if(comment.user==user._id){%>
+                    <form class="deleteComment">
+                      <input type="hidden" name="comment" value="<%=comment._id%>">
+                      <input type="hidden" name="post" value="<%=post._id%>">
+                      <button type="submit" name="delete" >Delete</button>
+                    </form>
+                  <%}%>
+                </div>
+              <%});%>
+            </div>
+
+          </div>
+        <%})%>
+
+      </div>
+    <%}%>
+
+  <%}else{%>
+    <span>Become friends to see posts</span>
+  <%}%>
+
+<%}%>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/profile.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<%-include("partials/header")%>
+<%-include("partials/navBar")%>
+
+<div class="groupInputBox">
+  <form action="/groups/createGroup" method="post">
+    <label for="title">Group Name:</label>
+    <input type="text" name="name" placeholder="Group Name" required><br><br>
+    <label for="description">Group Description</label>
+    <input type="text" name="description" placeholder="Group Description" required><br><br>
+    <span>Select members to be invited</span><br><br>
+    <%users.forEach((user=>{%>
+      <%if(user._id!==logged._id){%>
+        <input type="checkbox" name="members[]" value="<%=user._id%>">
+        <label for="members[]"><%=user.name%></label>
+      <%}%>
+
+    <%}));%>
+    <br><br>
+    <select name="privacy" required>
+      <option value="private" default name="privacy">Private</option>
+      <option value="public" name="privacy">Public</option>
+    </select>
+    <button type="submit" name="button">Create Group</button>
+  </form>
+
+</div>
+
+<%-include("partials/footer")%>
