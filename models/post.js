@@ -18,7 +18,8 @@ const postSchema=new mongoose.Schema({
     userName:String,
     user:String,
     content:String,
-    time:String
+    time:String,
+    profilePicture:String
   }],
 
   file:String,

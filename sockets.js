@@ -62,13 +62,14 @@ module.exports = function(io) {
       );
     });
 
-    socket.on("addComment",({user,post,content,userName})=>{
+    socket.on("addComment",({user,post,content,userName,profilePicture})=>{
       Post.findById(post,(err,resultPost)=>{
         resultPost.comments.push({
           user:user,
           userName:userName,
           content:content,
-          time:new Date().toLocaleString()
+          time:new Date().toLocaleString(),
+          profilePicture
         });
         resultPost.save();
       });
